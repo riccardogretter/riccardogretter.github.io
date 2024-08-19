@@ -1,47 +1,70 @@
-// Ensure the DOM is fully loaded before running the script
-document.addEventListener('DOMContentLoaded', function () {
-    // Select the required DOM elements
-    var password = document.querySelectorAll('[data-id="password"]');
-    var button = document.querySelectorAll('[data-id="button"]');
-    var alert = document.querySelectorAll('[data-id="alert"]');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+</head>
+<body>
+    <!-- Add your HTML content here -->
+    
+    <!-- Example HTML structure -->
+    <input type="password" data-id="password" placeholder="Enter your password">
+    <button data-id="button">Login</button>
+    <div data-id="alert" style="display: none; color: red;">Incorrect password</div>
 
-    // Ensure the elements are found
-    if (password.length > 0 && button.length > 0 && alert.length > 0) {
-        // Define the login function
-        function login(secret) {
-            var hash = sha1(secret);
-            var url = hash + '/index.html';
+    <!-- Include the SHA-1 script (you'll need to provide this) -->
+    <script src="path/to/sha1.js"></script>
 
-            var request = new XMLHttpRequest();
-            request.open('GET', url, true);
+    <!-- Your JavaScript code -->
+    <script>
+        // Ensure the DOM is fully loaded before running the script
+        document.addEventListener('DOMContentLoaded', function () {
+            // Select the required DOM elements
+            var password = document.querySelectorAll('[data-id="password"]');
+            var button = document.querySelectorAll('[data-id="button"]');
+            var alert = document.querySelectorAll('[data-id="alert"]');
 
-            // Define a function to handle errors
-            function handleError() {
-                parent.location.hash = hash;
-                alert[0].style.display = 'block';
-                password[0].setAttribute('placeholder', 'Incorrect password');
-                password[0].value = '';
-            }
+            // Ensure the elements are found
+            if (password.length > 0 && button.length > 0 && alert.length > 0) {
+                // Define the login function
+                function login(secret) {
+                    var hash = sha1(secret);
+                    var url = hash + '/index.html';
 
-            // Handle the request's success or failure
-            request.onload = function () {
-                if (request.status >= 200 && request.status < 400) {
-                    window.location = url;
-                } else {
-                    handleError();
+                    var request = new XMLHttpRequest();
+                    request.open('GET', url, true);
+
+                    // Define a function to handle errors
+                    function handleError() {
+                        parent.location.hash = hash;
+                        alert[0].style.display = 'block';
+                        password[0].setAttribute('placeholder', 'Incorrect password');
+                        password[0].value = '';
+                    }
+
+                    // Handle the request's success or failure
+                    request.onload = function () {
+                        if (request.status >= 200 && request.status < 400) {
+                            window.location = url;
+                        } else {
+                            handleError();
+                        }
+                    };
+
+                    request.onerror = handleError;
+
+                    request.send();
                 }
-            };
 
-            request.onerror = handleError;
-
-            request.send();
-        }
-
-        // Add the event listener to the button
-        button[0].addEventListener('click', function () {
-            login(password[0].value);
+                // Add the event listener to the button
+                button[0].addEventListener('click', function () {
+                    login(password[0].value);
+                });
+            } else {
+                console.error('Required elements not found in the DOM.');
+            }
         });
-    } else {
-        console.error('Required elements not found in the DOM.');
-    }
-});
+    </script>
+</body>
+</html>
