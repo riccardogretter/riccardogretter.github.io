@@ -6,32 +6,36 @@
     <title>Login Page</title>
 </head>
 <body>
-    <input type="password" data-id="password" placeholder="Enter your password">
-    <button data-id="button">Login</button>
-    <div data-id="alert" style="display: none; color: red;">Incorrect password</div>
+    <input type="password" id="password" placeholder="Enter your password">
+    <button id="button">Login</button>
+    <div id="alert" style="display: none; color: red;">Incorrect password</div>
 
     <!-- Include the SHA-1 script from a CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jsSHA/3.2.0/sha1.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            var password = document.querySelectorAll('[data-id="password"]');
-            var button = document.querySelectorAll('[data-id="button"]');
-            var alert = document.querySelectorAll('[data-id="alert"]');
+            var password = document.querySelector('#password');
+            var button = document.querySelector('#button');
+            var alert = document.querySelector('#alert');
 
-            if (password.length > 0 && button.length > 0 && alert.length > 0) {
+            if (password && button && alert) {
                 function login(secret) {
-                    var hash = sha1(secret);
+                    // Initialize jsSHA and compute the SHA-1 hash
+                    var shaObj = new jsSHA("SHA-1", "TEXT");
+                    shaObj.update(secret);
+                    var hash = shaObj.getHash("HEX");
+
+                    // Construct the URL
                     var url = hash + '/index.html';
 
                     var request = new XMLHttpRequest();
                     request.open('GET', url, true);
 
                     function handleError() {
-                        parent.location.hash = hashedSecret;
-                        alert[0].style.display = 'block';
-                        password[0].setAttribute('placeholder', 'Incorrect password');
-                        password[0].value = '';
+                        alert.style.display = 'block';
+                        password.setAttribute('placeholder', 'Incorrect password');
+                        password.value = '';
                     }
 
                     request.onload = function () {
@@ -47,8 +51,8 @@
                     request.send();
                 }
 
-                button[0].addEventListener('click', function () {
-                    var secret = password[0].value;
+                button.addEventListener('click', function () {
+                    var secret = password.value;
                     login(secret);
                 });
             } else {
