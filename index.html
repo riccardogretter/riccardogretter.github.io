@@ -28,8 +28,8 @@
             // Ensure the elements are found
             if (password.length > 0 && button.length > 0 && alert.length > 0) {
                 // Define the login function
-                function login(secret) {
-                    var hash = 'testpass';
+                function login(password) {
+                    var hash = password;
                     var url = hash + '/index.html';
 
                     var request = new XMLHttpRequest();
