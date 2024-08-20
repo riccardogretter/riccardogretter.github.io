@@ -6,44 +6,37 @@
     <title>Login Page</title>
 </head>
 <body>
-    <!-- Add your HTML content here -->
-    
-    <!-- Example HTML structure -->
     <input type="password" data-id="password" placeholder="Enter your password">
     <button data-id="button">Login</button>
     <div data-id="alert" style="display: none; color: red;">Incorrect password</div>
 
-    <!-- Include the SHA-1 script (you'll need to provide this) -->
-    <script src="path/to/sha1.js"></script>
+    <!-- Include the SHA-1 script from a CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsSHA/3.2.0/sha1.js"></script>
 
-    <!-- Your JavaScript code -->
     <script>
-        // Ensure the DOM is fully loaded before running the script
         document.addEventListener('DOMContentLoaded', function () {
-            // Select the required DOM elements
             var password = document.querySelectorAll('[data-id="password"]');
             var button = document.querySelectorAll('[data-id="button"]');
             var alert = document.querySelectorAll('[data-id="alert"]');
 
-            // Ensure the elements are found
             if (password.length > 0 && button.length > 0 && alert.length > 0) {
-                // Define the login function
-                function login(password) {
-                    var hash = password;
-                    var url = hash + '/index.html';
+                function login(secret) {
+                    var hash = new jsSHA("SHA-1", "TEXT");
+                    hash.update(secret);
+                    var hashedSecret = hash.getHash("HEX");
+
+                    var url = hashedSecret + '/index.html';
 
                     var request = new XMLHttpRequest();
                     request.open('GET', url, true);
 
-                    // Define a function to handle errors
                     function handleError() {
-                        parent.location.hash = hash;
+                        parent.location.hash = hashedSecret;
                         alert[0].style.display = 'block';
                         password[0].setAttribute('placeholder', 'Incorrect password');
                         password[0].value = '';
                     }
 
-                    // Handle the request's success or failure
                     request.onload = function () {
                         if (request.status >= 200 && request.status < 400) {
                             window.location = url;
@@ -57,9 +50,9 @@
                     request.send();
                 }
 
-                // Add the event listener to the button
                 button[0].addEventListener('click', function () {
-                    login(password[0].value);
+                    var secret = password[0].value;
+                    login(secret);
                 });
             } else {
                 console.error('Required elements not found in the DOM.');
