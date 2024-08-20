@@ -15,44 +15,26 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            var password = document.querySelector('#password');
-            var button = document.querySelector('#button');
-            var alert = document.querySelector('#alert');
+            var passwordInput = document.querySelector('#password');
+            var loginButton = document.querySelector('#button');
+            var alertDiv = document.querySelector('#alert');
 
-            if (password && button && alert) {
+            if (passwordInput && loginButton && alertDiv) {
                 function login(secret) {
                     // Initialize jsSHA and compute the SHA-1 hash
                     var shaObj = new jsSHA("SHA-1", "TEXT");
                     shaObj.update(secret);
                     var hash = shaObj.getHash("HEX");
 
-                    // Construct the URL
+                    // Construct the URL using the SHA-1 hash
                     var url = hash + '/index.html';
 
-                    var request = new XMLHttpRequest();
-                    request.open('GET', url, true);
-
-                    function handleError() {
-                        alert.style.display = 'block';
-                        password.setAttribute('placeholder', 'Incorrect password');
-                        password.value = '';
-                    }
-
-                    request.onload = function () {
-                        if (request.status >= 200 && request.status < 400) {
-                            window.location = url;
-                        } else {
-                            handleError();
-                        }
-                    };
-
-                    request.onerror = handleError;
-
-                    request.send();
+                    // Attempt to redirect to the generated URL
+                    window.location = url;
                 }
 
-                button.addEventListener('click', function () {
-                    var secret = password.value;
+                loginButton.addEventListener('click', function () {
+                    var secret = passwordInput.value;
                     login(secret);
                 });
             } else {
