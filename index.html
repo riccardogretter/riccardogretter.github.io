@@ -4,52 +4,55 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha1/0.6.0/sha1.min.js"></script> <!-- SHA-1 Library -->
+    <style>
+        .alert {
+            display: none;
+            color: red;
+        }
+    </style>
 </head>
 <body>
-    <input type="password" id="password" placeholder="Enter your password">
-    <button id="button">Login</button>
-    <div id="alert" style="display: none; color: red;">Incorrect password</div>
-
-    <!-- Include the SHA-1 script from a CDN -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsSHA/3.2.0/sha1.js"></script>
+    <div>
+        <h2>Login</h2>
+        <input type="password" id="password" placeholder="Enter your password" />
+        <button id="loginBtn">Login</button>
+        <div class="alert" data-id="alert">Incorrect password, please try again.</div>
+    </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var passwordInput = document.querySelector('#password');
-            var loginButton = document.querySelector('#button');
-            var alertDiv = document.querySelector('#alert');
+        function login(secret) {
+            var hash = sha1(secret);
+            var url = hash + '/index.html';
+            var alert = document.querySelectorAll('[data-id="alert"]');
+            var password = document.querySelectorAll('#password');
+            
+            var request = new XMLHttpRequest();
+            request.open('GET', url, true);
 
-            if (passwordInput && loginButton && alertDiv) {
-function login(secret) {
-	var hash = sha1(secret)
-	var url = hash + '/index.html'
-	var alert = document.querySelectorAll('[data-id="alert"]')
+            request.onload = function () {
+                if (request.status >= 200 && request.status < 400) {
+                    window.location = url;
+                } else {
+                    parent.location.hash = hash;
+                    alert[0].style.display = 'block';
+                    password[0].setAttribute('placeholder', 'Incorrect password');
+                    password[0].value = '';
+                }
+            };
 
-	var request = new XMLHttpRequest()
-	request.open('GET', url, true)
+            request.onerror = function () {
+                parent.location.hash = hash;
+                alert[0].style.display = 'block';
+                password[0].setAttribute('placeholder', 'Incorrect password');
+                password[0].value = '';
+            };
 
-	request.onload = function () {
-		if (request.status >= 200 && request.status < 400) {
-			window.location = url
-		} else {
-			parent.location.hash = hash
-			alert[0].style.display = 'block'
-			password[0].setAttribute('placeholder', 'Incorrect password')
-			password[0].value = ''
-		}
-	}
-	request.onerror = function () {
-		parent.location.hash = hash
-		alert[0].style.display = 'block'
-		password[0].setAttribute('placeholder', 'Incorrect password')
-		password[0].value = ''
-	}
-	request.send()
-}
+            request.send();
+        }
 
-button[0].addEventListener('click', function () {
-	login(password[0].value)
-})
+        document.getElementById('loginBtn').addEventListener('click', function () {
+            login(document.getElementById('password').value);
         });
     </script>
 </body>
