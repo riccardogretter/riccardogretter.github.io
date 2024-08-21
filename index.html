@@ -1,23 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accedi al sito del matrimonio</title>
+    <title>Pagina di login al sito del matrimonio di Erica e Riccardo</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha1/0.6.0/sha1.min.js"></script> <!-- SHA-1 Library -->
     <style>
         .alert {
             display: none;
             color: red;
         }
+
+        .body {
+            background-color: antiquewhite;
+
+        }
     </style>
 </head>
+
 <body>
     <div>
-        <h2>Accedi al sito del matrimonio</h2>
-        <input type="password" id="password" placeholder="Dite, Amici, ed entrate" />
-        <button id="loginBtn">Vai!</button>
-        <div class="alert" data-id="alert">Password errata, riprova!</div>
+        <h2>Benvenuto al nostro sito del matrimonio!</h2>
+        <input type="password" id="password" placeholder="Inserisci qui la parola chiave" />
+        <button id="loginBtn">Entra</button>
+        <div class="alert" data-id="alert">La parola chiave era errata, riprova!</div>
     </div>
 
     <script>
@@ -26,18 +33,18 @@
             var url = hash + '/index.html';
             var alert = document.querySelectorAll('[data-id="alert"]');
             var password = document.querySelectorAll('#password');
-            
+
             var request = new XMLHttpRequest();
             request.open('GET', url, true);
 
             request.onload = function () {
                 if (request.status >= 200 && request.status < 400) {
                     let nva = new Date().getTime() + 1_000 <!-- This makes the url valid for a second, i.e. cannot be shared -->
-                    window.location = url + "?nva="+nva    
+                    window.location = url + "?nva=" + nva
                 } else {
                     parent.location.hash = hash;
                     alert[0].style.display = 'block';
-                    password[0].setAttribute('placeholder', 'Incorrect password');
+                    password[0].setAttribute('placeholder', 'Riprova!');
                     password[0].value = '';
                 }
             };
@@ -45,7 +52,7 @@
             request.onerror = function () {
                 parent.location.hash = hash;
                 alert[0].style.display = 'block';
-                password[0].setAttribute('placeholder', 'Incorrect password');
+                password[0].setAttribute('placeholder', 'Riprova!');
                 password[0].value = '';
             };
 
@@ -57,4 +64,5 @@
         });
     </script>
 </body>
+
 </html>
