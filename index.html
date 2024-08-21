@@ -32,7 +32,7 @@
 
             request.onload = function () {
                 if (request.status >= 200 && request.status < 400) {
-                    let nva = new Date().getTime() + 1_000
+                    let nva = new Date().getTime() + 1_000 <!-- This makes the url valid for a second, i.e. cannot be shared -->
                     window.location = url + "?nva="+nva    
                 } else {
                     parent.location.hash = hash;
