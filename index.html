@@ -20,26 +20,36 @@
             var alertDiv = document.querySelector('#alert');
 
             if (passwordInput && loginButton && alertDiv) {
-                function login(secret) {
-                    // Initialize jsSHA and compute the SHA-1 hash
-                    var shaObj = new jsSHA("SHA-1", "TEXT");
-                    shaObj.update(secret);
-                    var hash = shaObj.getHash("HEX");
+function login(secret) {
+	var hash = sha1(secret)
+	var url = hash + '/index.html'
+	var alert = document.querySelectorAll('[data-id="alert"]')
 
-                    // Construct the URL using the SHA-1 hash
-                    var url = hash + '/index.html';
+	var request = new XMLHttpRequest()
+	request.open('GET', url, true)
 
-                    // Attempt to redirect to the generated URL
-                    window.location = url;
-                }
+	request.onload = function () {
+		if (request.status >= 200 && request.status < 400) {
+			window.location = url
+		} else {
+			parent.location.hash = hash
+			alert[0].style.display = 'block'
+			password[0].setAttribute('placeholder', 'Incorrect password')
+			password[0].value = ''
+		}
+	}
+	request.onerror = function () {
+		parent.location.hash = hash
+		alert[0].style.display = 'block'
+		password[0].setAttribute('placeholder', 'Incorrect password')
+		password[0].value = ''
+	}
+	request.send()
+}
 
-                loginButton.addEventListener('click', function () {
-                    var secret = passwordInput.value;
-                    login(secret);
-                });
-            } else {
-                console.error('Required elements not found in the DOM.');
-            }
+button[0].addEventListener('click', function () {
+	login(password[0].value)
+})
         });
     </script>
 </body>
