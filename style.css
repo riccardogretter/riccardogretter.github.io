@@ -1,0 +1,130 @@
+@font-face {
+    font-family: 'SebBobby';
+    src: url('../Sebastian Bobby Slanted.otf') format('opentype');
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: 'Salty';
+    src: url('../Salty Feathers.otf') format('opentype');
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: 'PetiteCaps';
+    src: url('../MrsEavesPetiteCaps PetiteCaps.ttf') format('truetype');
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: 'Black';
+    src: url('../Black Mango Light.ttf') format('truetype');
+    font-weight: normal;
+}
+
+/* General reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Black"
+}
+
+
+
+/* Body styling */
+body {
+    background-color: #F6EAD7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: #333;
+}
+
+/* Container styling */
+div {
+    background-color: #fffff0;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding-top: 3%;
+    text-align: center;
+    width: 50%;
+}
+
+/* Heading styling */
+h2 {
+    font-size: calc(3vw);
+    margin-bottom: 1.5rem;
+    color: #5c4a09;
+    font-weight: normal;
+}
+
+.special-font-2 {
+    font-family: 'Salty';
+    font-size: calc(10vw);
+    font-weight: normal;
+}
+
+
+/* Input styling */
+input[type="password"] {
+    width: calc(100% - 2rem);
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+
+}
+
+/* Button styling */
+button {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #a36f3fff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #5c4a09;
+}
+
+/* Alert message styling */
+.alert {
+    display: none;
+    margin-top: 1rem;
+    padding: 0.75rem;
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+/* Placeholder styling for error state */
+input[type="password"]::placeholder {
+    color: #999;
+}
+
+/* Responsive design */
+@media (max-width: 400px) {
+    div {
+        padding: 1.5rem;
+    }
+
+    h2 {
+        font-size: 1.25rem;
+    }
+
+    input[type="password"],
+    button {
+        font-size: 0.9rem;
+        padding: 0.6rem;
+    }
+}
